@@ -1,0 +1,12 @@
+{
+  "name": "neighborhood-map",
+  "version": "1.0.0",
+  "description": "an event finder single page web application using knockout and google map",
+  "dependencies": {},
+  "devDependencies": {
+    "requirejs": "~2.1.11"
+  },
+  "repository": "",
+  "author": "Yutian Wu",
+  "license": "BSD"
+}

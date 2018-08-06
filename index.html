@@ -1,0 +1,82 @@
+<!DOCTYPE>
+<html>
+<head>
+    <title>neighborhood map</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/main.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.4/js/all.js"></script>
+    <script data-main="main" src="libs/require.js"></script>
+</head>
+<body>
+<header>
+
+</header>
+<section class="main-section container-fluid p-0">
+    <div class="row no-gutters">
+        <aside id="search-box" class="col-6 col-md-4 col-lg-3">
+            <div class="input-group p-1">
+                <input type="text" class="form-control" data-bind="textInput: filter">
+                <div class="input-group-append">
+                    <button id="searchBtn" class="btn btn-primary" type="button" data-toggle="collapse"
+                            data-target="#filters" aria-expanded="false" aria-controls="filters">
+                        Filter
+                    </button>
+                </div>
+            </div>
+            <div class="collapse" id="filters">
+                <div class="form-check has-success ml-2">
+                    <label class="form-check-label">
+                        <input type="checkbox" class="form-check-input" id="music" value="option1">
+                        Music
+                    </label>
+                </div>
+                <div class="form-check has-success ml-2">
+                    <label class="form-check-label">
+                        <input type="checkbox" class="form-check-input" id="film" value="option1">
+                        Film
+                    </label>
+                </div>
+                <div class="form-check has-success ml-2">
+                    <label class="form-check-label">
+                        <input type="checkbox" class="form-check-input" id="restaurant" value="option1">
+                        Restaurant
+                    </label>
+                </div>
+            </div>
+            <ul class="list-group" data-bind="foreach: filteredEvents">
+                <li class="list-group-item d-flex p-1" data-bind="event: {mouseover: openInfoWindow, mouseout: closeInfoWindow, click: setInfoWindow}">
+                    <div class="col-4 p-1">
+                        <img class="img-thumbnail rounded" data-bind="attr: { src: imageUrl, alt: title}"/>
+                    </div>
+                    <div class="col-8 p-1">
+                        <a class="event-text" target="_blank" data-bind="text: title, attr: { href: url }, click: showLoading, clickBubble: false"></a>
+                        <p>
+                            <i class="far fa-calendar" aria-hidden="true"></i><span class="event-text" data-bind="text: ' ' + dates.join(', ')"></span>
+                            <br/>
+                            <i class="fas fa-map-marker-alt" aria-hidden="true"></i><span class="event-text" data-bind="text: ' ' + locationLiteral"></span>
+                        </p>
+                    </div>
+                </li>
+            </ul>
+        </aside>
+        <div id="google-map-container" class="col-6 col-md-8 col-lg-9">
+            <nav id="top-nav" class="p-1">
+                <button type="button" class="btn btn-info" data-bind="toggleSidebar: {}">
+                    <i class="fas fa-align-left"></i>
+                    <span>Toggle Sidebar</span>
+                </button>
+            </nav>
+            <div id="google-map"></div>
+        </div>
+    </div>
+</section>
+<footer>
+
+</footer>
+</body>
+</html>

@@ -1,0 +1,43 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+}
+
+header {
+    height:50px;
+}
+
+.main-section {
+    height: 100%;
+    width: 100%;
+}
+
+.list-group {
+    display: block !important;
+    height: 90vh;
+    overflow: scroll;
+}
+
+.event-text {
+    font-size: 0.8em;
+}
+
+#google-map-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    top:0;
+}
+
+#google-map {
+    height: 90vh;
+    width: 100%;
+}
+
+footer {
+    height:20px;
+}

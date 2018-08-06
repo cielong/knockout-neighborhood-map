@@ -1,0 +1,8 @@
+# emacs back up files
+.~/
+
+# webstorm project files
+.idea/
+
+# node modules
+node_modules/
