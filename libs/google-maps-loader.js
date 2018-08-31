@@ -1,6 +1,6 @@
 var google_maps_loaded_def = null;
 
-define(['jquery'],function($) {
+define(['jquery', 'constants'],function($, constants) {
 
     if(!google_maps_loaded_def) {
 
@@ -10,8 +10,10 @@ define(['jquery'],function($) {
             google_maps_loaded_def.resolve(google.maps);
         };
 
-        require(['http://maps.googleapis.com/maps/api/js?key=AIzaSyAoeJFWQOzBoOcKyHyeWDqNEVcbP08fWqo&v=3&callback=google_maps_loaded'], function(){}, function(err) {
-            google_maps_loaded_def.reject();
+        require([`${constants.GOOGLE_MAPS_URL}?key=${constants.GOOGLE_MAPS_API_KEY}&v=3&callback=google_maps_loaded`],
+            function(){},
+            function(err) {
+                google_maps_loaded_def.reject();
         });
 
     }
