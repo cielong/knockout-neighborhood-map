@@ -34,12 +34,12 @@
                 </div>
             </div>
             <p class="notice" data-bind="visible: filteredEvents().length == 0">
-                <i class="fa fa-spinner fa-spin" id="loading-symbol" data-bind="if: nearByEvents().length == 0"></i>
+                <i class="fa fa-spinner fa-spin" id="loading-symbol" data-bind="if: nearbyEvents().length == 0"></i>
                 <i class="far fa-dizzy" id="error-symbol"></i><br/>
                 <span id="message" data-bind="text: currentStatus"></span>
             </p>
             <ul class="list-group event-list-group" data-bind="foreach: filteredEvents,
-                                                               style: {visibility: nearByEvents().length > 0? 'visible':'hidden'}">
+                                                               style: {visibility: nearbyEvents().length > 0? 'visible':'hidden'}">
                 <li class="list-group-item d-flex p-1 mr-1 align-items-center" data-bind="event: {mouseover: openInfoWindow, mouseout: closeInfoWindow, click: setInfoWindow}">
                     <div class="col-4 p-1">
                         <img class="event-img rounded" data-bind="attr: { src: imageUrl, alt: title}"/>
