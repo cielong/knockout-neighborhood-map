@@ -1,33 +1,38 @@
-define(['app', 'Knockout', 'jquery', 'geohash', 'Event', 'constants', 'utils'],
+/**
+ * @description: app ViewModel
+ */
+define(["app", "Knockout", "jquery", "geohash", "Event", "constants", "utils"],
     function(app, ko, $, geohash, Event, constants, utils) {
     return function appViewModel() {
         let self = this;
 
         // Properties
         self.currentStatus = ko.observable("");
-        self.currentLocation = ko.observable(null);
+
+        /*
+        currentLocation: the current location
+        searchLoaction: location used to get nearbyEvents, potentially enhance later
+                        with search ui to enable search other places
+        nearbyEvents: events near the searchLocation
+         */
+        self.currentLocation = null;
         self.searchLocation = ko.observable(null);
-        self.nearByEvents = ko.observableArray([]);
-        self.categories = ko.pureComputed(function() {
-            let categories = self.nearByEvents().map((event) => event.categories);
-            return Array.from(new Set([].concat(...categories)));
-        }, self);
+        self.nearbyEvents = ko.observableArray([]);
+
+        /*
+        Available categories to filter events
+         */
+        self.categories = ko.observableArray(constants.CATEGORIES);
         self.selectedCategories = ko.observableArray();
 
-        self.toggleCategories = function(category) {
-            console.log(self.selectedCategories());
-            if (self.selectedCategories.indexOf(category) !== -1) {
-                self.selectedCategories.remove(category);
-            } else {
-                self.selectedCategories.push(category);
-            }
-            console.log(self.selectedCategories());
-        };
-
-        self.filter = ko.observable('');
+        /**
+         * @description: Filter events based on a filter string and accordingly changing
+         * markers showing on the map
+         */
+        self.filter = ko.observable("");
         self.filteredEvents = ko.computed(function () {
             const filter = self.filter().toLowerCase();
-            let events = ko.utils.arrayFilter(self.nearByEvents(), function (event) {
+            let events = ko.utils.arrayFilter(self.nearbyEvents(), function (event) {
                 const visible = event.title.toLowerCase().indexOf(filter) >= 0 &&
                     self.selectedCategories.indexOf(event.categories[0]) !== -1;
                 if (visible) {
@@ -49,20 +54,23 @@ define(['app', 'Knockout', 'jquery', 'geohash', 'Event', 'constants', 'utils'],
             self.initGeoLocation();
         };
 
+
+        /**
+         *@description: Get current location using navigator.geolocation
+         * if unavailable, throw error message
+         */
         self.initGeoLocation = function () {
             console.log("Init GeoLocation");
-            self.currentStatus("Getting Current Location.");
+            self.currentStatus("Getting current location.");
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function (position) {
-                    const currentPosition = {
+                    self.currentLocation = new google.maps.LatLng({
                         lat: position.coords.latitude,
                         lng: position.coords.longitude
-                    };
-                    console.log(app.markersPool);
-                    app.markersPool.setCurrentLocation(new google.maps.LatLng(currentPosition));
-                    self.currentLocation(currentPosition);
-                    self.searchLocation(currentPosition);
-                    self.loadNearByEvents();
+                    });
+                    app.markersPool.setCurrentLocation(self.currentLocation);
+                    self.searchLocation(self.currentLocation);
+                    self.loadNearbyEvents();
                 }, function () {
                     console.warn("navigator.geolocation is not available.");
                     utils.showError("navigator.geolocation is not available.");
@@ -73,36 +81,35 @@ define(['app', 'Knockout', 'jquery', 'geohash', 'Event', 'constants', 'utils'],
             }
         };
 
-        self.loadNearByEvents = function() {
+        /**
+         * @description: Loading nearby events through a ajax call from TicketMaster API
+         */
+        self.loadNearbyEvents = function() {
             console.log("Loading nearby events.");
-            self.currentStatus("Loading NearBy Events.");
-            const geopoint = geohash.encode(self.searchLocation().lat, self.searchLocation().lng, 9);
-            const url = `${constants.TICKET_MASTER_URL}?apikey=${constants.TICKET_MASTER_API_KEY}`+
+            self.currentStatus("Loading nearby events.");
+            const geopoint = geohash.encode(self.searchLocation().lat(), self.searchLocation().lng(), 9);
+            const url = `${constants.TICKET_MASTER_URL}?` +
+                `apikey=${constants.TICKET_MASTER_API_KEY}`+
                 `&geoPoint=${geopoint}&radius=50&keyword=`;
             $.ajax({
                 url: url,
                 dataType: "json",
-                success: function (response) {
-                    console.log(response);
+            }).then(
+                function (response) {
                     let events = response["_embedded"].events;
-                    events = filterEvents(events);
-                    // console.log(events);
-                    for (let i = 0; i < events.length; i++) {
-                        //console.log(events[i]);
-                        let event = new Event(events[i]);
-                        self.nearByEvents.push(event);
-                    }
-                    self.selectedCategories(self.categories());
-                },
-                error: function (err) {
-                    console.log(err);
-                    utils.showError("Failed to load nearby events.");
+                    filterEvents(events).forEach(
+                        function(event) {
+                            self.nearbyEvents.push(new Event(event));
+                        }
+                    );
+                    self.selectedCategories(self.categories())
                 }
+            ).catch(() => {
+                utils.showError("Sorry, load nearby events failed");
             });
         };
 
         let filterEvents = function(events) {
-            console.log(events);
             let uniqueEvents = {};
             for (let i=0; i < events.length; i++) {
                 let event = events[i];
@@ -114,6 +121,17 @@ define(['app', 'Knockout', 'jquery', 'geohash', 'Event', 'constants', 'utils'],
                 }
             }
             return Object.values(uniqueEvents);
+        };
+
+
+        self.toggleCategories = function(category) {
+            console.log(self.selectedCategories());
+            if (self.selectedCategories.indexOf(category) !== -1) {
+                self.selectedCategories.remove(category);
+            } else {
+                self.selectedCategories.push(category);
+            }
+            console.log(self.selectedCategories());
         };
 
         // Initialize

@@ -1,3 +1,8 @@
+/**
+ * @description: an helper for creating markers on google maps while
+ * join events on the same location
+ * @param {object} app: object contains preloaded google map loader
+ */
 define([], function() {
     return function LocationMarkersPool(app) {
         let self = this;
@@ -15,6 +20,8 @@ define([], function() {
                     map: app.map
                 }))
             }
+            app.bounds.extend(location);
+            app.map.fitBounds(app.bounds);
         };
 
         self.createMarker = function(event) {
@@ -35,23 +42,15 @@ define([], function() {
             event.marker.addListener('click', function () {
                 self.openInfoWindow(this);
             });
-            event.marker.addListener('dblclick', function () {
-                self.closeInfoWindow(this);
-            });
             self.toggleMarker(event);
             return self.markersPool.get(locationUrlValue);
         };
 
         self.toggleMarker = function(event) {
-            let visible = false;
             let locationUrlValue = event.location.toUrlValue();
             let marker = self.markersPool.get(locationUrlValue);
             let events = self.marker2events.get(marker);
-            for (let i=0; i < events.length; i++) {
-                if (events[i].visible()) {
-                    visible = true;
-                }
-            }
+            const visible = events.some((event) => event.visible());
             let map = app.map;
             let bounds = app.bounds;
             if (!visible) {
@@ -80,7 +79,7 @@ define([], function() {
             }
         };
 
-        self.closeInfoWindow = function(marker) {
+        self.closeInfoWindow = function() {
             let infoWindow = app.infoWindow;
             if (infoWindow.marker !== null) {
                 infoWindow.marker = null;

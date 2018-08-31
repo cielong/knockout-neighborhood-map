@@ -1,3 +1,8 @@
+/**
+ * @description Represents an event
+ * @constructor parseEvent
+ * @param {object} event, an JSON object returned by the TicketMaster API
+ */
 define(['app', 'Knockout'], function(app, ko) {
     return function Event(event) {
         let self = this;
@@ -5,13 +10,16 @@ define(['app', 'Knockout'], function(app, ko) {
         // Properties
 
         // Methods
+        /**
+         * @description: Parse JSON Object into an event object
+         * work as a constructor
+         */
         self.parseEvent = function() {
             self.url = event.url;
             self.title = event.name;
             self.distance = event.distance;
             self.desciption = event.desciption;
             self.categories = event.classifications.map((classification) => classification.segment.name);
-            console.log(self.categories);
             self.dates = [...new Set(event.dates.map((date) => date.start.localDate))];
             self.dates.sort();
             self.datesLiteral = self.dates.slice(0, 2).join(', ');
@@ -34,19 +42,9 @@ define(['app', 'Knockout'], function(app, ko) {
             self.marker = app.markersPool.createMarker(this);
         };
 
-        self.toggleMarker = function() {
-            console.log("marker's toggle");
-            let map = app.map;
-            let bounds = app.bounds;
-            if (self.visible()) {
-                self.marker.setMap(map);
-                bounds.extend(self.location);
-            } else {
-                self.marker.setMap(null);
-            }
-            map.fitBounds(bounds);
-        };
-
+        /*
+        Open/close infoWindow when mouse over, off or click the list item in the aside bar.
+         */
         self.setInfoWindow = function() {
             self.fixInfowindow(true);
             self.openInfoWindow();
@@ -54,7 +52,6 @@ define(['app', 'Knockout'], function(app, ko) {
 
         self.openInfoWindow = function() {
             console.log("Event's openInfoWindow");
-            console.log(self.location);
             let map = app.map;
             let infoWindow = app.infoWindow;
             let content = self.infoWindowTemplate();
@@ -83,6 +80,9 @@ define(['app', 'Knockout'], function(app, ko) {
             return true;
         };
 
+        /*
+        InfoWindow content
+         */
         self.infoWindowTemplate = function() {
             console.log("template");
             let content = "<div class='gm-infoWindow container'><div class='row no-gutters'><div class='col-12'><ul class='list-group list-group-flush'>";
