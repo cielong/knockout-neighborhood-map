@@ -7,23 +7,47 @@ html, body {
     height: 100%;
 }
 
-header {
-    height:50px;
+.notice {
+    font-size: 16px;
+    padding: 60px;
+    text-align: center;
+}
+
+#error-symbol {
+    display: none;
 }
 
 .main-section {
-    height: 100%;
+    height: 95%;
     width: 100%;
 }
 
-.list-group {
+.event-list-group {
     display: block !important;
     height: 90vh;
     overflow: scroll;
+    visibility: hidden;
+}
+
+.event-img {
+    max-width: 90px;
+}
+
+.event-item {
+    display: none;
+}
+
+.event-title {
+    font-size: 1em;
 }
 
 .event-text {
     font-size: 0.8em;
+}
+
+.event-text::before {
+    content: " ";
+    white-space: pre;
 }
 
 #google-map-container {
@@ -38,6 +62,15 @@ header {
     width: 100%;
 }
 
+.gm-infoWindow {
+    max-height: 300px;
+    width: 300px !important;
+}
+
+.gm-infoWindow img {
+    max-width: 80px !important;
+}
+
 footer {
-    height:20px;
+    height:5vh;
 }
