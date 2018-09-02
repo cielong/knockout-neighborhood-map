@@ -3,7 +3,7 @@
  * @constructor parseEvent
  * @param {object} event, an JSON object returned by the TicketMaster API
  */
-define(['app', 'Knockout'], function(app, ko) {
+define(["app"], function(app) {
     return function Event(event) {
         let self = this;
 
@@ -29,7 +29,7 @@ define(['app', 'Knockout'], function(app, ko) {
             if (event["_embedded"] !== null) {
                 let embedded = event["_embedded"];
                 if (embedded["venues"] !== null && embedded["venues"].length !== 0) {
-                    let venue = embedded["venues"][0];
+                    let venue = embedded.venues[0];
                     self.location = new google.maps.LatLng({
                         lat: parseFloat(venue.location.latitude.toString()),
                         lng: parseFloat(venue.location.longitude.toString())
@@ -47,11 +47,14 @@ define(['app', 'Knockout'], function(app, ko) {
         self.setInfoWindow = function() {
             app.fixInfoWindow = false;
             self.openInfoWindow();
+            self.marker.setAnimation(google.maps.Animation.BOUNCE);
             app.fixInfoWindow = true;
+
         };
 
         self.unsetInfoWindow = function() {
             app.fixInfoWindow = false;
+            self.marker.setAnimation(null);
             self.closeInfoWindow();
         };
 
@@ -64,8 +67,10 @@ define(['app', 'Knockout'], function(app, ko) {
                 infoWindow.marker = self.marker;
                 infoWindow.setContent(content);
                 infoWindow.open(map, self.marker);
+                self.marker.setAnimation(google.maps.Animation.BOUNCE);
                 infoWindow.addListener('closeclick', function () {
                     app.fixInfoWindow = false;
+                    self.marker.setAnimation(null);
                     self.closeInfoWindow();
                 });
             }
@@ -75,6 +80,7 @@ define(['app', 'Knockout'], function(app, ko) {
             let infoWindow = app.infoWindow;
             if (!app.fixInfoWindow && infoWindow.marker !== null) {
                 infoWindow.close();
+                self.marker.setAnimation(null);
                 infoWindow.marker = null;
             }
         };
