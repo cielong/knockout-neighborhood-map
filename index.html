@@ -40,7 +40,9 @@
             </p>
             <ul class="list-group event-list-group" data-bind="foreach: filteredEvents,
                                                                style: {visibility: nearbyEvents().length > 0? 'visible':'hidden'}">
-                <li class="list-group-item d-flex p-1 mr-1 align-items-center" data-bind="event: {mouseover: openInfoWindow, mouseout: closeInfoWindow, click: setInfoWindow}">
+                <li class="list-group-item d-flex p-1 mr-1 align-items-center"
+                    data-bind="event: {mouseover: openInfoWindow, mouseout: closeInfoWindow,
+                                       click: setInfoWindow, dblclick: unsetInfoWindow}">
                     <div class="col-4 p-1">
                         <img class="event-img rounded" data-bind="attr: { src: imageUrl, alt: title}"/>
                     </div>

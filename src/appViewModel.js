@@ -22,8 +22,8 @@ define(["app", "Knockout", "jquery", "geohash", "Event", "constants", "utils"],
         /*
         Available categories to filter events
          */
-        self.categories = ko.observableArray(constants.CATEGORIES);
-        self.selectedCategories = ko.observableArray();
+        self.categories = constants.CATEGORIES;
+        self.selectedCategories = ko.observableArray(self.categories);
 
         /**
          * @description: Filter events based on a filter string and accordingly changing
@@ -33,15 +33,10 @@ define(["app", "Knockout", "jquery", "geohash", "Event", "constants", "utils"],
         self.filteredEvents = ko.computed(function () {
             const filter = self.filter().toLowerCase();
             let events = ko.utils.arrayFilter(self.nearbyEvents(), function (event) {
-                const visible = event.title.toLowerCase().indexOf(filter) >= 0 &&
+                event.visible = event.title.toLowerCase().indexOf(filter) >= 0 &&
                     self.selectedCategories.indexOf(event.categories[0]) !== -1;
-                if (visible) {
-                    event.visible(true);
-                } else {
-                    event.visible(false);
-                }
                 app.markersPool.toggleMarker(event);
-                return visible;
+                return event.visible;
             });
             if (events.length === 0) {
                 self.currentStatus("Sorry, no events has been found.");
@@ -96,13 +91,12 @@ define(["app", "Knockout", "jquery", "geohash", "Event", "constants", "utils"],
                 dataType: "json",
             }).then(
                 function (response) {
-                    let events = response["_embedded"].events;
+                    let events = response._embedded.events;
                     filterEvents(events).forEach(
                         function(event) {
                             self.nearbyEvents.push(new Event(event));
                         }
                     );
-                    self.selectedCategories(self.categories())
                 }
             ).catch(() => {
                 utils.showError("Sorry, load nearby events failed");

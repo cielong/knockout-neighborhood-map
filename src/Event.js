@@ -23,13 +23,13 @@ define(['app', 'Knockout'], function(app, ko) {
             self.dates = [...new Set(event.dates.map((date) => date.start.localDate))];
             self.dates.sort();
             self.datesLiteral = self.dates.slice(0, 2).join(', ');
-            if (event["images"].length !== 0) {
-                self.imageUrl = event["images"][0]["url"];
+            if (event.images.length !== 0) {
+                self.imageUrl = event.images[0].url;
             }
             if (event["_embedded"] !== null) {
-                let embeddeds = event["_embedded"];
-                if (embeddeds["venues"] !== null && embeddeds["venues"].length !== 0) {
-                    let venue = embeddeds["venues"][0];
+                let embedded = event["_embedded"];
+                if (embedded["venues"] !== null && embedded["venues"].length !== 0) {
+                    let venue = embedded["venues"][0];
                     self.location = new google.maps.LatLng({
                         lat: parseFloat(venue.location.latitude.toString()),
                         lng: parseFloat(venue.location.longitude.toString())
@@ -37,8 +37,7 @@ define(['app', 'Knockout'], function(app, ko) {
                     self.locationLiteral = `${venue.address.line1}, ${venue.city.name}, ${venue.state.name}`;
                 }
             }
-            self.visible = ko.observable(true);
-            self.fixInfowindow = ko.observable(false);
+            self.visible = true;
             self.marker = app.markersPool.createMarker(this);
         };
 
@@ -46,32 +45,36 @@ define(['app', 'Knockout'], function(app, ko) {
         Open/close infoWindow when mouse over, off or click the list item in the aside bar.
          */
         self.setInfoWindow = function() {
-            self.fixInfowindow(true);
+            app.fixInfoWindow = false;
             self.openInfoWindow();
+            app.fixInfoWindow = true;
         };
 
+        self.unsetInfoWindow = function() {
+            app.fixInfoWindow = false;
+            self.closeInfoWindow();
+        };
+
+
         self.openInfoWindow = function() {
-            console.log("Event's openInfoWindow");
             let map = app.map;
             let infoWindow = app.infoWindow;
             let content = self.infoWindowTemplate();
-            if (infoWindow.marker !== self.marker) {
+            if (!app.fixInfoWindow && infoWindow.marker !== self.marker) {
                 infoWindow.marker = self.marker;
                 infoWindow.setContent(content);
                 infoWindow.open(map, self.marker);
                 infoWindow.addListener('closeclick', function () {
-                    self.fixInfowindow(false);
-                    infoWindow.marker = null;
+                    app.fixInfoWindow = false;
+                    self.closeInfoWindow();
                 });
             }
         };
 
         self.closeInfoWindow = function() {
             let infoWindow = app.infoWindow;
-            if (infoWindow.marker !== null) {
-                if (!self.fixInfowindow()) {
-                    infoWindow.close();
-                }
+            if (!app.fixInfoWindow && infoWindow.marker !== null) {
+                infoWindow.close();
                 infoWindow.marker = null;
             }
         };
@@ -84,7 +87,6 @@ define(['app', 'Knockout'], function(app, ko) {
         InfoWindow content
          */
         self.infoWindowTemplate = function() {
-            console.log("template");
             let content = "<div class='gm-infoWindow container'><div class='row no-gutters'><div class='col-12'><ul class='list-group list-group-flush'>";
             content += `<li class="list-group-item d-flex p-1">` +
                 `<div class="col-4 p-1">` +

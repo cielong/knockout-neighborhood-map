@@ -8,6 +8,8 @@ define(['LocationMarkersPool'],function(locationMarkersPool){
 
         markersPool: null,
 
+        fixInfoWindow: null,
+
         start: function(){
 
             this.map = new google.maps.Map(document.getElementById('google-map'), {
@@ -19,6 +21,8 @@ define(['LocationMarkersPool'],function(locationMarkersPool){
             });
 
             this.bounds = new google.maps.LatLngBounds();
+
+            this.fixInfoWindow = false;
 
             this.markersPool = new locationMarkersPool(this);
         }

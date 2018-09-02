@@ -47,10 +47,16 @@ define([], function() {
         };
 
         self.toggleMarker = function(event) {
+            // unset infoWindow if event is going to be filtered out
+            if (!event.visible && app.infoWindow.marker === event.marker) {
+                event.unsetInfoWindow();
+            }
+
+            // toggle marker based on all event on event location
             let locationUrlValue = event.location.toUrlValue();
             let marker = self.markersPool.get(locationUrlValue);
             let events = self.marker2events.get(marker);
-            const visible = events.some((event) => event.visible());
+            const visible = events.some((event) => event.visible);
             let map = app.map;
             let bounds = app.bounds;
             if (!visible) {
@@ -69,12 +75,13 @@ define([], function() {
             let events = self.marker2events.get(marker);
             let content = self.infoWindowTemplate(events);
             if (infoWindow.marker !== marker) {
+                app.fixInfoWindow = true;
                 infoWindow.marker = marker;
-                console.log(content);
                 infoWindow.setContent(content);
                 infoWindow.open(map, marker);
                 infoWindow.addListener('closeclick', function () {
                     infoWindow.marker = null;
+                    app.fixInfoWindow = false;
                 });
             }
         };
@@ -90,7 +97,7 @@ define([], function() {
         self.infoWindowTemplate = function(events) {
             let content = "<div class='gm-infoWindow container'><div class='row no-gutters'><div class='col-12'><ul class='list-group list-group-flush'>";
             for (let i=0; i<events.length; i++) {
-                if (events[i].visible()) {
+                if (events[i].visible) {
                     content += `<li class="list-group-item d-flex p-1">` +
                         `<div class="col-4 p-1">` +
                         `<img class="rounded" src="${events[i].imageUrl}"/>` +
