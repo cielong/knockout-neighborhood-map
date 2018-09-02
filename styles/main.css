@@ -64,11 +64,11 @@ html, body {
 
 .gm-infoWindow {
     max-height: 300px;
-    width: 300px !important;
+    max-width: 250px !important;
 }
 
 .gm-infoWindow img {
-    max-width: 80px !important;
+    max-width: 100% !important;
 }
 
 footer {

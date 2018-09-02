@@ -19,7 +19,7 @@ define(['LocationMarkersPool'],function(locationMarkersPool){
             });
 
             this.infoWindow = new google.maps.InfoWindow({
-                maxWidth: null
+                maxWidth: 250
             });
 
             this.bounds = new google.maps.LatLngBounds();
