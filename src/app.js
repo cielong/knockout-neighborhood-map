@@ -6,6 +6,8 @@ define(['LocationMarkersPool'],function(locationMarkersPool){
 
         infoWindow: null,
 
+        markerLayer: null,
+
         markersPool: null,
 
         fixInfoWindow: null,
@@ -21,6 +23,12 @@ define(['LocationMarkersPool'],function(locationMarkersPool){
             });
 
             this.bounds = new google.maps.LatLngBounds();
+
+            this.markerLayer = new google.maps.OverlayView();
+            this.markerLayer.draw = function() {
+                this.getPanes().markerLayer.id = "markerLayer";
+            };
+            this.markerLayer.setMap(this.map);
 
             this.fixInfoWindow = false;
 

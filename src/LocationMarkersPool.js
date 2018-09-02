@@ -3,7 +3,7 @@
  * join events on the same location
  * @param {object} app: object contains preloaded google map loader
  */
-define([], function() {
+define(["constants"], function(constants) {
     return function LocationMarkersPool(app) {
         let self = this;
 
@@ -17,7 +17,9 @@ define([], function() {
             if (!self.markersPool.has(locationUrlValue)) {
                 self.markersPool.set(locationUrlValue, new google.maps.Marker({
                     position: location,
-                    map: app.map
+                    map: app.map,
+                    icon: constants.ICONS_PATH + "currentPosition.png",
+                    optimized: false
                 }))
             }
             app.bounds.extend(location);

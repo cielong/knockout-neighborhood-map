@@ -7,6 +7,7 @@ define([], function() {
         TICKET_MASTER_API_KEY: "tE7RHnt1Mx8hou7wGc8GACGXAAWoSITC",
         GOOGLE_MAPS_URL: "https://maps.googleapis.com/maps/api/js",
         GOOGLE_MAPS_API_KEY: "AIzaSyAoeJFWQOzBoOcKyHyeWDqNEVcbP08fWqo",
+        ICONS_PATH: "./assets/icons/",
         CATEGORIES: ["Music", "Sports", "Arts & Theatre", "Film", "Miscellaneous", "Donation"]
     }
 });

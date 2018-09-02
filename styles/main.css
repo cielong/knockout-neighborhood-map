@@ -58,7 +58,7 @@ html, body {
 }
 
 #google-map {
-    height: 90vh;
+    height: 100vh;
     width: 100%;
 }
 
@@ -73,4 +73,25 @@ html, body {
 
 footer {
     height:5vh;
+}
+
+#markerLayer img[src='./assets/icons/currentPosition.png'] {
+    animation: pulse .5s infinite alternate;
+    -webkit-animation: pulse .5s infinite alternate;
+    transform-origin: center;
+    -webkit-transform-origin: center;
+}
+
+@keyframes pulse{
+    to {
+        transform: scale(0.7);
+        -webkit-transform: scale(0.7);
+    }
+}
+
+@-webkit-keyframes pulse{
+    to {
+        transform: scale(0.7);
+        -webkit-transform: scale(0.7);
+    }
 }
