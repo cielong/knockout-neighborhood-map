@@ -46,6 +46,9 @@ define(["app", ], function(app) {
         Open/close infoWindow when mouse over, off or click the list item in the aside bar.
          */
         self.setInfoWindow = function() {
+            if (app.fixInfoWindow && app.infoWindow.marker !== self.marker) {
+                app.infoWindow.marker.setAnimation(null);
+            }
             app.fixInfoWindow = false;
             self.openInfoWindow();
             self.marker.setAnimation(google.maps.Animation.BOUNCE);
