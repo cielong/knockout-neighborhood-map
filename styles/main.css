@@ -24,7 +24,7 @@ html, body {
 
 .event-list-group {
     display: block !important;
-    height: 100vh;
+    height: 94vh;
     overflow: scroll;
     visibility: hidden;
 }
