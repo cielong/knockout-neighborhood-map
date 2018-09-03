@@ -21,9 +21,7 @@ define(["app", ], function(app) {
             self.distance = event.distance;
             self.desciption = event.desciption;
             self.categories = event.classifications.map((classification) => classification.segment.name);
-            self.dates = [...new Set(event.dates.map((date) => date.start.localDate)), ];
-            self.dates.sort();
-            self.datesLiteral = self.dates.slice(0, 2).join(', ');
+            self.dates = new Date(event.dates.start.dateTime).toLocaleDateString();
             if (event.images.length !== 0) {
                 self.imageUrl = event.images[0].url;
             }
@@ -33,9 +31,9 @@ define(["app", ], function(app) {
                     let venue = embedded.venues[0];
                     self.location = new google.maps.LatLng({
                         lat: parseFloat(venue.location.latitude.toString()),
-                        lng: parseFloat(venue.location.longitude.toString())
+                        lng: parseFloat(venue.location.longitude.toString()),
                     });
-                    self.locationLiteral = `${venue.address.line1}, ${venue.city.name}, ${venue.state.name}`;
+                    self.locationLiteral = `${venue.address.line1}, ${venue.city.name}, ${venue.state.stateCode}`;
                 }
             }
             self.visible = true;
@@ -105,7 +103,7 @@ define(["app", ], function(app) {
                 `<div class="col-8 p-1">` +
                 `<h6 class="event-title">${self.title}</h6>` +
                 `<p>` +
-                `<i class="far fa-calendar" aria-hidden="true"></i><span class="event-text">${self.dates.join(', ')}</span>` +
+                `<i class="far fa-calendar" aria-hidden="true"></i><span class="event-text">${self.dates}</span>` +
                 `<br/>` +
                 `<i class="fas fa-map-marker-alt" aria-hidden="true"></i><span class="event-text">${self.locationLiteral}</span>` +
                 `<br/>` +

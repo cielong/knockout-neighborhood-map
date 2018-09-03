@@ -3,6 +3,7 @@ require.config({
     paths:{
         require: 'libs/require',
         jquery: 'libs/jquery',
+        underscore: "libs/underscore",
         GoogleMapsLoader: 'libs/google-maps-loader',
         geohash: 'libs/latlon-geohash',
         Knockout: 'libs/knockout-3.4.2',
@@ -12,6 +13,11 @@ require.config({
         LocationMarkersPool: 'src/LocationMarkersPool',
         appViewModel: 'src/appViewModel',
         app: 'src/app',
+    },
+    shim: {
+        "underscore": {
+            exports: "_",
+        },
     },
 });
 

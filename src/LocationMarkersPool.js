@@ -108,7 +108,7 @@ define(["constants",], function(constants) {
                         `<div class="col-8 p-1">` +
                         `<h6 class="event-title">${events[i].title}</h6>` +
                         `<p>` +
-                        `<i class="far fa-calendar" aria-hidden="true"></i><span class="event-text">${events[i].dates.join(', ')}</span>` +
+                        `<i class="far fa-calendar" aria-hidden="true"></i><span class="event-text">${events[i].dates}</span>` +
                         `<br/>` +
                         `<i class="fas fa-map-marker-alt" aria-hidden="true"></i><span class="event-text">${events[i].locationLiteral}</span>` +
                         `<br/>` +
