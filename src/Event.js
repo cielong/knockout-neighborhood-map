@@ -1,9 +1,10 @@
+"use strict";
 /**
  * @description Represents an event
  * @constructor parseEvent
  * @param {object} event, an JSON object returned by the TicketMaster API
  */
-define(["app"], function(app) {
+define(["app", ], function(app) {
     return function Event(event) {
         let self = this;
 
@@ -20,15 +21,15 @@ define(["app"], function(app) {
             self.distance = event.distance;
             self.desciption = event.desciption;
             self.categories = event.classifications.map((classification) => classification.segment.name);
-            self.dates = [...new Set(event.dates.map((date) => date.start.localDate))];
+            self.dates = [...new Set(event.dates.map((date) => date.start.localDate)), ];
             self.dates.sort();
             self.datesLiteral = self.dates.slice(0, 2).join(', ');
             if (event.images.length !== 0) {
                 self.imageUrl = event.images[0].url;
             }
-            if (event["_embedded"] !== null) {
-                let embedded = event["_embedded"];
-                if (embedded["venues"] !== null && embedded["venues"].length !== 0) {
+            if (event._embedded !== null) {
+                let embedded = event._embedded;
+                if (embedded.venues !== null && embedded.venues.length !== 0) {
                     let venue = embedded.venues[0];
                     self.location = new google.maps.LatLng({
                         lat: parseFloat(venue.location.latitude.toString()),
@@ -113,5 +114,5 @@ define(["app"], function(app) {
 
         // Initialize
         self.parseEvent();
-    }
+    };
 });

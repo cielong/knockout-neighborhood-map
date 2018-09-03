@@ -1,9 +1,10 @@
+"use strict";
 /**
  * @description: an helper for creating markers on google maps while
  * join events on the same location
  * @param {object} app: object contains preloaded google map loader
  */
-define(["constants"], function(constants) {
+define(["constants",], function(constants) {
     return function LocationMarkersPool(app) {
         let self = this;
 
@@ -19,7 +20,7 @@ define(["constants"], function(constants) {
                     position: location,
                     map: app.map,
                     icon: constants.ICONS_PATH + "currentPosition.png",
-                    optimized: false
+                    optimized: false,
                 }))
             }
             app.bounds.extend(location);
@@ -37,7 +38,7 @@ define(["constants"], function(constants) {
                 self.markersPool.set(locationUrlValue, new google.maps.Marker({
                     position: event.location,
                 }));
-                events = [event];
+                events = [event,];
             }
             event.marker = self.markersPool.get(locationUrlValue);
             self.marker2events.set(event.marker, events);

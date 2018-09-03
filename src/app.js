@@ -1,4 +1,5 @@
-define(['LocationMarkersPool'],function(locationMarkersPool){
+"use strict";
+define(['LocationMarkersPool', ],function(LocationMarkersPool){
     return {
         map: null,
 
@@ -15,11 +16,11 @@ define(['LocationMarkersPool'],function(locationMarkersPool){
         start: function(){
 
             this.map = new google.maps.Map(document.getElementById('google-map'), {
-                zoom: 13
+                zoom: 13,
             });
 
             this.infoWindow = new google.maps.InfoWindow({
-                maxWidth: 250
+                maxWidth: 250,
             });
 
             this.bounds = new google.maps.LatLngBounds();
@@ -32,7 +33,7 @@ define(['LocationMarkersPool'],function(locationMarkersPool){
 
             this.fixInfoWindow = false;
 
-            this.markersPool = new locationMarkersPool(this);
-        }
-    }
+            this.markersPool = new LocationMarkersPool(this);
+        },
+    };
 });

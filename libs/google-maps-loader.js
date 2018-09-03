@@ -1,23 +1,24 @@
-var google_maps_loaded_def = null;
+"use strict";
+let googleMapsLoadedDeferred = null;
 
-define(['jquery', 'constants'],function($, constants) {
+define(['jquery', 'constants',],function($, constants) {
 
-    if(!google_maps_loaded_def) {
+    if(!googleMapsLoadedDeferred) {
 
-        google_maps_loaded_def = $.Deferred();
+        googleMapsLoadedDeferred = $.Deferred();
 
-        window.google_maps_loaded = function() {
-            google_maps_loaded_def.resolve(google.maps);
+        window.googleMapsLoaded = function() {
+            googleMapsLoadedDeferred.resolve(google.maps);
         };
 
-        require([`${constants.GOOGLE_MAPS_URL}?key=${constants.GOOGLE_MAPS_API_KEY}&v=3&callback=google_maps_loaded`],
+        require([`${constants.GOOGLE_MAPS_URL}?key=${constants.GOOGLE_MAPS_API_KEY}&v=3&callback=googleMapsLoaded`, ],
             function(){},
-            function(err) {
-                google_maps_loaded_def.reject();
+            function() {
+                googleMapsLoadedDeferred.reject();
         });
 
     }
 
-    return google_maps_loaded_def.promise();
+    return googleMapsLoadedDeferred.promise();
 
 });

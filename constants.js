@@ -1,3 +1,4 @@
+"use strict";
 /**
  * @description: constants used in the app
  */
@@ -8,6 +9,6 @@ define([], function() {
         GOOGLE_MAPS_URL: "https://maps.googleapis.com/maps/api/js",
         GOOGLE_MAPS_API_KEY: "AIzaSyAoeJFWQOzBoOcKyHyeWDqNEVcbP08fWqo",
         ICONS_PATH: "./assets/icons/",
-        CATEGORIES: ["Music", "Sports", "Arts & Theatre", "Film", "Miscellaneous", "Donation"]
-    }
+        CATEGORIES: ["Music", "Sports", "Arts & Theatre", "Film", "Miscellaneous", "Donation",],
+    };
 });

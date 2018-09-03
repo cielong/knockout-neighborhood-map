@@ -1,7 +1,8 @@
+"use strict";
 /**
  * @description: app ViewModel
  */
-define(["app", "Knockout", "jquery", "geohash", "Event", "constants", "utils"],
+define(["app", "Knockout", "jquery", "geohash", "Event", "constants", "utils",],
     function(app, ko, $, geohash, Event, constants, utils) {
     return function appViewModel() {
         let self = this;
@@ -61,7 +62,7 @@ define(["app", "Knockout", "jquery", "geohash", "Event", "constants", "utils"],
                 navigator.geolocation.getCurrentPosition(function (position) {
                     self.currentLocation = new google.maps.LatLng({
                         lat: position.coords.latitude,
-                        lng: position.coords.longitude
+                        lng: position.coords.longitude,
                     });
                     app.markersPool.setCurrentLocation(self.currentLocation);
                     self.searchLocation(self.currentLocation);
@@ -69,7 +70,7 @@ define(["app", "Knockout", "jquery", "geohash", "Event", "constants", "utils"],
                 }, function () {
                     console.warn("navigator.geolocation is not available.");
                     utils.showError("navigator.geolocation is not available.");
-                }, {maximumAge: 600000});
+                }, {maximumAge: 600000,});
             } else {
                 console.warn("navigator.geolocation is not available.");
                 utils.showError("navigator.geolocation is not available.");
@@ -105,9 +106,9 @@ define(["app", "Knockout", "jquery", "geohash", "Event", "constants", "utils"],
 
         let filterEvents = function(events) {
             let uniqueEvents = {};
-            for (let i=0; i < events.length; i++) {
+            for (let i=0; i < events.length; i += 1) {
                 let event = events[i];
-                event.dates = [event.dates];
+                event.dates = [event.dates,];
                 if (!uniqueEvents.hasOwnProperty(event.name)) {
                     uniqueEvents[event.name] = event;
                 } else {
