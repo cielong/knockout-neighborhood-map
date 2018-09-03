@@ -34,8 +34,8 @@
                         </div>
                     </div>
                     <p class="notice" data-bind="visible: filteredEvents().length == 0">
-                        <i class="fa fa-spinner fa-spin" id="loading-symbol" data-bind="if: nearbyEvents().length == 0"></i>
-                        <i class="far fa-dizzy" id="error-symbol"></i><br/>
+                        <i class="fa fa-spinner fa-spin status-message" data-bind="if: nearbyEvents().length == 0"></i>
+                        <i class="far fa-dizzy error-message"></i><br/>
                         <span id="message" data-bind="text: currentStatus"></span>
                     </p>
                     <ul class="list-group event-list-group" data-bind="foreach: filteredEvents,
@@ -50,8 +50,7 @@
                                 <a class="event-title" target="_blank" data-bind="text: title, attr: { href: url }, click: showLoading, clickBubble: false"></a>
                                 <p>
                                     <i class="far fa-calendar" aria-hidden="true"></i>
-                                    <span class="event-text" data-bind="text: datesLiteral"></span>
-                                    <small data-bind="text: '...', visible: dates.length > 2"></small>
+                                    <span class="event-text" data-bind="text: dates"></span>
                                     <br/>
                                     <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
                                     <span class="event-text" data-bind="text: locationLiteral"></span>
@@ -60,10 +59,22 @@
                         </li>
                     </ul>
                 </aside>
-                <div id="google-map-container" class="col-12 col-md-8">
-                    <div id="google-map"></div>
+                <div class="gm-container col-12 col-md-8">
+                    <div class="gm" id="google-map"></div>
                 </div>
             </div>
         </section>
+        <div class="container-fluid warning-message-box">
+            <div class="row justify-content-center">
+                <div class="col-6 notice warning-message">
+                    <p>
+                        Caution!
+                        Loading nearby events failed!
+                        <br/>
+                        You are now in fake data mode, all the data showed may be outdated!
+                    </p>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

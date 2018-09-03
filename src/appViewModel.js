@@ -2,8 +2,8 @@
 /**
  * @description: app ViewModel
  */
-define(["app", "Knockout", "jquery", "geohash", "Event", "constants", "utils",],
-    function(app, ko, $, geohash, Event, constants, utils) {
+define(["app", "Knockout", "jquery", "underscore", "geohash", "Event", "constants", "utils",],
+    function(app, ko, $, _, geohash, Event, constants, utils) {
     return function appViewModel() {
         let self = this;
 
@@ -91,7 +91,7 @@ define(["app", "Knockout", "jquery", "geohash", "Event", "constants", "utils",],
                 url: url,
                 dataType: "json",
             }).then(
-                function (response) {
+                (response) => {
                     let events = response._embedded.events;
                     filterEvents(events).forEach(
                         function(event) {
@@ -100,33 +100,31 @@ define(["app", "Knockout", "jquery", "geohash", "Event", "constants", "utils",],
                     );
                 }
             ).catch(() => {
-                utils.showError("Sorry, load nearby events failed");
+                //utils.showError("Sorry, load nearby events failed");
+                utils.showWarning("Caution! Load nearby events failed! You are now watching only fake data.");
+                $.getJSON("./assets/data/fakeData.json", (response) => {
+                    let events = response._embedded.events;
+                    filterEvents(events).forEach((event) => {
+                        self.nearbyEvents.push(new Event(event));
+                    });
+                });
+            }).catch(() => {
+                utils.showError("Network failed")
             });
         };
 
         let filterEvents = function(events) {
-            let uniqueEvents = {};
-            for (let i=0; i < events.length; i += 1) {
-                let event = events[i];
-                event.dates = [event.dates,];
-                if (!uniqueEvents.hasOwnProperty(event.name)) {
-                    uniqueEvents[event.name] = event;
-                } else {
-                    uniqueEvents[event.name].dates.push(event.dates[0]);
-                }
-            }
-            return Object.values(uniqueEvents);
+            events = _.uniq(events, false, (event) => event.name);
+            return events;
         };
 
 
         self.toggleCategories = function(category) {
-            console.log(self.selectedCategories());
             if (self.selectedCategories.indexOf(category) !== -1) {
                 self.selectedCategories.remove(category);
             } else {
                 self.selectedCategories.push(category);
             }
-            console.log(self.selectedCategories());
         };
 
         // Initialize

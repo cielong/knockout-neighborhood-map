@@ -1,12 +1,16 @@
-define(['jquery'], function($) {
+"use strict";
+define(['jquery',], function($) {
     return {
         /**
          * @description: Use jquery to show error message,
          */
         showError: function(message) {
-            $("#loading-symbol").hide();
-            $("#error-symbol").show();
-            $("#message").text(message);
-        }
+            $(".status-message").hide();
+            $(".error-message").show();
+            $(".message").text(message);
+        },
+        showWarning: () => {
+            $(".warning-message").fadeIn("fast").fadeOut(5000);
+        },
     }
 });
